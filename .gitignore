@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+*.sav
+*.mss
+savedata*/
+work/
+extracted/
+*.xlsx
+*.arc
+*.exe
+*.zip
+*.bak
+*.log
+scarlett-migration.json
+.env
+.env.*

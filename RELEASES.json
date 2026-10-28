@@ -1,0 +1,8 @@
+{
+  "current_release": "RC7",
+  "filename": "Scarlett_English_Patch_2026-10-28_RC7.zip",
+  "sha256": "038aa3bfdade754fe1bb7bd183c603d4a201a20d6783f8a9563b73139cfde7be",
+  "size_bytes": 80004971,
+  "migration_target": "RC7",
+  "migration_tables_sha256": "483e0a9b822527e6ed21bf69eff189c2e1346a48cc3c53bcc5feab61d5587011"
+}
