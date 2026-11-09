@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 280" role="img" aria-labelledby="title desc">
+<title id="title">Scarlett English Patch</title><desc id="desc">Scarlet and gold lettering against a dark background.</desc>
+<defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#10131b"/><stop offset="1" stop-color="#291019"/></linearGradient></defs>
+<rect width="1200" height="280" rx="14" fill="url(#bg)"/>
+<path d="M910 0H1200V280H720Z" fill="#931b31" opacity=".2"/>
+<path d="M1030 0H1200V280H840Z" fill="#d63e50" opacity=".12"/>
+<path d="M64 220H1136" stroke="#c9ad78" stroke-width="1" opacity=".5"/>
+<text x="62" y="151" fill="#e94659" font-family="Georgia,serif" font-size="104" font-style="italic">Scarlett</text>
+<text x="69" y="198" fill="#ecd9b7" font-family="Arial,sans-serif" font-size="24" letter-spacing="7">ENGLISH PATCH</text>
+<text x="1134" y="196" text-anchor="end" fill="#ecd9b7" font-family="Arial,sans-serif" font-size="18">WINDOWS PC · v1.0</text>
+</svg>

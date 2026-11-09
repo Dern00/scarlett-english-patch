@@ -1,44 +1,41 @@
-# Save migration to RC7
+# Save handling and recovery
 
-The converter creates a **new folder of converted copies**. It never edits the source folder. The original folder is the rollback copy.
+Save handling is part of **Install.cmd**. No separate converter, Python installation or manual folder renaming is required.
 
-## Supported scope
+## Before installing
 
-| Source | Scope |
-| --- | --- |
-| RC5 | Verified source-position mappings to RC7; ordinary opening save loaded and advanced in game |
-| RC6 | Verified mappings to RC7; ordinary opening save loaded in game |
-| RC7 | Structural validation and unchanged copies where the glossary already uses the English layout |
-| Original Japanese shared progress | Glossary entry indexes converted by original stable keys; settings and other progress preserved |
+Close Scarlett and preserve the complete original game and `savedata` folder. Start a new game with the English patch: Japanese scene saves are unsupported.
 
-RC1–RC4 scene saves, Japanese scene saves, development/test builds, unknown positions, and mixed or corrupted glossary histories are not supported. A successful opening test is not proof that every scene save is compatible. Unknown positions cause an error rather than a guessed conversion.
+Japanese shared progress, such as Cyclopedia registrations, can be converted when no unsupported scene saves are present. If a profile cannot be converted, keep the whole folder intact and ask for help rather than deleting saves to force installation.
 
-All released RC1–RC7 dictionaries use the same layout. Choose `japanese` only when the saved glossary registrations were created using the original Japanese dictionary. A folder carried forward from an older build may retain that older layout even after starting a new game.
+## If the installer asks about an existing profile
 
-## Use
+Choose the version that created the scene saves. For an original Japanese profile containing shared progress only, choose **Original Japanese game (shared progress only)**. The glossary-origin checkbox identifies registrations carried over from the Japanese game.
 
-1. Close Scarlett completely. Keep the existing `savedata` folder.
-2. Put `scarlett_save_migration.py` and `save-migration-maps.json.gz` together. Install Python 3.10 or newer if needed.
-3. Run a conversion, replacing the example paths with your own:
+The currently installed game alone cannot prove a copied save's origin. Cancel if unsure. Do not select a different version to bypass a conversion refusal.
 
-```powershell
-py -3 scarlett_save_migration.py "D:\Games\Scarlett\savedata" "D:\Games\Scarlett\savedata-rc7" --from-release rc5 --dictionary english-rc1-rc7
-```
+## What the installer preserves
 
-For RC6 saves, use `--from-release rc6`. For Japanese shared progress with no scene saves, use `--from-release japanese --dictionary japanese`.
+- The complete pre-install save profile, retained as `savedata-before` under that installation's backup directory.
+- Read history and unrelated save-folder files.
+- Save data outside the verified execution-position and glossary-index fields.
 
-4. If it succeeds, rename the original folder to `savedata-before-rc7`, then rename the converted folder to `savedata`. Do this while the game remains closed.
-5. Open RC7, load a known save, advance, check the backlog and dictionary, and confirm your unlocks. Retain the original folder until you are satisfied.
+The full profile is validated before converted files replace `savedata`. Unsupported signatures, unknown layouts and unmapped positions stop the conversion. A small `scarlett-save-version.json` marker identifies the resulting format.
 
-To roll back, close the game, move the converted folder aside, and restore the original folder's name. Restore the matching earlier patch as well.
+## Restore
 
-If the folder contains scene saves created under different releases, do not label the entire folder as one version. Convert copies grouped by their known source release and retain the original folder. If a source version is uncertain, leave that save untouched for individual assessment.
+1. Close Scarlett.
+2. Run **Restore.cmd** and choose the same game folder.
+3. If several installation receipts are offered, choose the installation you intend to undo.
 
-## What changes
+Restore returns the exact pre-install game files and save profile. Newer progress is retained under the selected backup as `savedata-after-patch`. It is not converted for the restored Japanese game; retain it for reinstallation or individual recovery.
 
-- Proven script execution/return positions in scene saves.
-- Nonzero glossary indexes in the known-entry matrix, across all three profiles.
+Backups and receipts live under `Scarlett-English-Patch/backups` in the game folder. Keep them. Restore does not merge profiles or silently discard newer saves.
 
-Other save bytes, screenshots, settings, unlocks, and read-history files are preserved. The output includes a receipt of input/output hashes and changed fields, without absolute source paths. Malformed files, unexpected layouts, existing output folders, and repeated conversion of a receipt-bearing output folder are rejected.
+## Interrupted installation or restoration
 
-This utility is separate from the installer. It does not automatically overwrite or activate converted files. Future patch releases require their own checked mapping tables; the current tables target RC7 only.
+Close the game and rerun **Restore.cmd** with the same receipt. Recovery validates known files before restoring them; unexpected external changes are refused. Preserve the backup directory and error message if recovery needs individual assistance.
+
+## Compatibility
+
+The conversion tables apply to this v1.0 build. Future patches require their own checked mappings. Bounded opening-save tests do not establish compatibility with every possible scene save. See [VALIDATION.md](VALIDATION.md).

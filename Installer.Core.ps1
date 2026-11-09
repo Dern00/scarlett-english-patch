@@ -1,4 +1,4 @@
-﻿# Built-in Windows PowerShell 5.1/.NET only. No game launch, saves, registry or network.
+﻿# Built-in Windows PowerShell 5.1/.NET only. No game launch, registry or network; verified transactional save conversion.
 Set-StrictMode -Version 2.0
 $ErrorActionPreference = 'Stop'
 $script:Owner = 'ScarlettEnglishPatchInstallerV1'
@@ -72,6 +72,7 @@ function Read-Manifest {
     Assert-Set @($m.installer_files | ForEach-Object { $_.path }) $script:InstallerNames 'installer'
     $support = @($m.support_files | ForEach-Object { $_.path })
     $expectedSupport = @($script:SupportNames)
+    if ($null -ne $m.PSObject.Properties['save_migration']) { $expectedSupport += @('SaveMigration.Core.ps1','save-migration-maps.json.gz') }
     # Existing RC1/RC2 receipts may contain their original review-status file.
     if ($support -contains 'REVIEW-STATUS.txt') { $expectedSupport += 'REVIEW-STATUS.txt' }
     if ($support -contains 'SHA256SUMS.txt') { $expectedSupport += 'SHA256SUMS.txt' }
@@ -81,8 +82,11 @@ function Read-Manifest {
         if ($t.payload -cne ('payload/'+$t.path)) { throw 'Unexpected payload path.' }
         $variants = @('original-update2')
         if ($t.path -ceq 'Scarlett.exe') { $variants = @('pristine','menu-fixed') }
+        if ($null -ne $m.PSObject.Properties['save_migration']) {
+            if ($t.path -ceq 'Scarlett.exe') { $variants += 'english' } else { $variants += @('rc5','rc6','rc7','rc8','test-2026-11-07') }
+        }
         Assert-Set @($t.bases | ForEach-Object { $_.variant }) $variants 'base variant'
-        foreach ($b in $t.bases) { Assert-Descriptor $b; if ($b.sha256 -eq $t.sha256) { throw 'Patched and base hashes must differ.' } }
+        foreach ($b in $t.bases) { Assert-Descriptor $b; if ($b.sha256 -eq $t.sha256 -and $b.variant -ne 'english') { throw 'Patched and base hashes must differ.' } }
     }
     foreach ($e in @($m.dependencies)+@($m.support_files)+@($m.installer_files)) { Assert-Descriptor $e }
     return $m
@@ -297,7 +301,7 @@ function Install-Support {
 }
 function Invoke-PatchInstall {
     [CmdletBinding(SupportsShouldProcess=$true)]
-    param([string]$GamePath, [string]$PackageRoot)
+    param([string]$GamePath, [string]$PackageRoot, [string]$SaveSourceRelease, [string]$SaveDictionary)
     $root = Get-Root $GamePath; $package = Get-Root $PackageRoot
     Assert-Disjoint $root $package
     $manifestPath = Join-Safe $package 'release-manifest.json'; $m = Read-Manifest $manifestPath
@@ -317,7 +321,7 @@ function Invoke-PatchInstall {
                 foreach ($e in @($m.support_files)+@($m.installer_files)) { Assert-File (Join-Safe $release $e.path) $e }
                 Assert-File (Join-Safe $release 'release-manifest.json') ([pscustomobject]@{size=(Get-Item -LiteralPath $manifestPath).Length;sha256=(Get-Sha $manifestPath)})
                 Assert-TemporaryFiles $root $ctx.Receipt $m
-                Write-Output 'Already installed and verified. No files changed.'; return
+                Write-Output 'Patch files already installed and verified. Saves were not converted again. No files changed.'; return
             }
         }
         throw 'Patched files have no matching verified committed receipt.'
@@ -343,8 +347,9 @@ function Invoke-PatchInstall {
     New-Directory $tx
     $manifestDesc = [pscustomobject]@{size=(Get-Item -LiteralPath $manifestPath).Length;sha256=(Get-Sha $manifestPath)}
     Copy-NewVerified $manifestPath (Join-Safe $tx 'release-manifest.json') $manifestDesc
-    $receipt = [pscustomobject]@{owner=$script:Owner;schema_version=1;install_id=$id;release_id=$m.release_id;game_root=$root;manifest_sha256=$manifestDesc.sha256;state='preparing';originals=$originals;replaced=@();temporary_names=@($m.targets | ForEach-Object { $targetName=$_.path; foreach ($purpose in @('new','rollback','restore')) { '.scarlett-english-'+$id+'-'+$purpose+'-'+$targetName+'.tmp' } });recovery_note=''}
+    $receipt = [pscustomobject]@{owner=$script:Owner;schema_version=1;install_id=$id;release_id=$m.release_id;game_root=$root;manifest_sha256=$manifestDesc.sha256;state='preparing';originals=$originals;replaced=@();temporary_names=@($m.targets | ForEach-Object { $targetName=$_.path; foreach ($purpose in @('new','rollback','restore')) { '.scarlett-english-'+$id+'-'+$purpose+'-'+$targetName+'.tmp' } });save_migration=$null;recovery_note=''}
     $journal = Join-Safe $tx 'journal.json'; $script:JournalHash=$null; Write-Journal $receipt $journal
+    $savePlan=$null
     try {
         $n=0
         foreach ($o in $originals) { Copy-NewVerified (Join-Safe $root $o.path) (Join-Safe $tx $o.path) $o; $n++; Invoke-TestHook ('AfterBackup'+$n) }
@@ -352,6 +357,7 @@ function Invoke-PatchInstall {
         Install-Support $root $package $m $manifestPath
         foreach ($o in $originals) { Assert-File (Join-Safe $tx $o.path) $o }
         foreach ($t in $m.targets) { Assert-File (Join-Safe $root ('.scarlett-english-'+$id+'-new-'+$t.path+'.tmp')) $t }
+        $savePlan=Prepare-InstallerSaveMigration $root $package $m $tx $receipt $journal $SaveSourceRelease $SaveDictionary
         $receipt.state='prepared'; Write-Journal $receipt $journal; Invoke-TestHook 'BeforeReplace'
         Assert-Closed $root
         $n=0
@@ -364,12 +370,14 @@ function Invoke-PatchInstall {
         Assert-Dependencies $root $m
         foreach ($t in $m.targets) { Assert-File (Join-Safe $root $t.path) $t }
         Assert-TemporaryFiles $root $receipt $m -Remove
+        Publish-InstallerSaveMigration $root $tx $receipt $journal $savePlan
         $receipt.state='committed'; Write-Journal $receipt $journal
         Write-Output ('Installed. Exact pre-install files and receipt: '+$journal)
     } catch {
         $cause=$_.Exception.Message; $receipt.state='rolling_back'
         try { Write-Journal $receipt $journal } catch { }
         $safe=$true
+        try { Undo-InstallerSaveMigration $root $tx $receipt $journal } catch { $safe=$false; $receipt.recovery_note=$_.Exception.Message }
         foreach ($t in @($m.targets)[1,0]) {
             $o=@($originals | Where-Object { $_.path -ceq $t.path })[0]; $path=Join-Safe $root $t.path
             try {
@@ -385,13 +393,14 @@ function Invoke-PatchInstall {
         if ($safe) { $receipt.state='rolled_back' } else { $receipt.state='recovery_required' }
         try { Write-Journal $receipt $journal } catch { }
         throw "Install failed: $cause ; transaction $journal ; state $($receipt.state). Backups/evidence retained."
-    }
+    } finally { Close-InstallerSaveHandles $savePlan }
 }
 function Invoke-PatchRestore {
     [CmdletBinding(SupportsShouldProcess=$true)]
     param([string]$GamePath, [string]$ReceiptPath)
     $root=Get-Root $GamePath; Assert-OwnedRoot $root
     $ctx=Assert-Receipt $root $ReceiptPath; $r=$ctx.Receipt; $m=$ctx.Manifest
+    Assert-InstallerSaveRestore $root $ctx.Transaction $r
     Assert-Dependencies $root $m; Assert-Closed $root
     $allBase=$true
     foreach ($t in $m.targets) {
@@ -408,10 +417,11 @@ function Invoke-PatchRestore {
             if (-not (Test-OriginalMetadata (Join-Safe $root $o.path) $o)) { $metadataExact=$false }
         }
         Assert-TemporaryFiles $root $r $m
-        if ($metadataExact -and $r.state -in @('restored','rolled_back')) { Write-Output 'Original files already present. No files changed.'; return }
+        if ($metadataExact -and $r.state -in @('restored','rolled_back') -and ((Get-SaveMigrationReceipt $r) -eq $null -or (Get-SaveMigrationReceipt $r).state -in @('restored','rolled_back'))) { Write-Output 'Original files already present. No files changed.'; return }
         if (-not $PSCmdlet.ShouldProcess($root, 'Verify already-original files, restore recorded metadata and close pending transaction')) { return }
         foreach ($o in $r.originals) { Set-OriginalMetadata (Join-Safe $root $o.path) $o }
         Assert-TemporaryFiles $root $r $m -Remove
+        Restore-InstallerSaveMigration $root $ctx.Transaction $r $ctx.Path
         $r.state='restored'; Write-Journal $r $ctx.Path
         Write-Output 'Original files verified; pending transaction closed. Backups/evidence retained.'
         return
@@ -419,7 +429,7 @@ function Invoke-PatchRestore {
     foreach ($o in $r.originals) { Assert-File (Join-Safe $ctx.Transaction $o.path) $o }
     Assert-TemporaryFiles $root $r $m
     $needed=[Int64]0; foreach ($o in $r.originals) { $needed += [Int64]$o.size }; Assert-Space $root $needed
-    if (-not $PSCmdlet.ShouldProcess($root, 'Restore exact receipt-selected original variants; retain all evidence')) { return }
+    if (-not $PSCmdlet.ShouldProcess($root, 'Restore original game and pre-install save profile; preserve newer saves in the backup')) { return }
     $r.state='restoring'; Write-Journal $r $ctx.Path
     try {
         foreach ($o in $r.originals) {
@@ -436,6 +446,7 @@ function Invoke-PatchRestore {
         }
         Assert-Dependencies $root $m
         Assert-TemporaryFiles $root $r $m -Remove
+        Restore-InstallerSaveMigration $root $ctx.Transaction $r $ctx.Path
         $r.state='restored'; Write-Journal $r $ctx.Path
         Write-Output ('Restored exact pre-install variants. Backups/notices retained: '+$ctx.Transaction)
     } catch {

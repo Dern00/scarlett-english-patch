@@ -1,8 +1,11 @@
 {
-  "current_release": "RC7",
-  "filename": "Scarlett_English_Patch_2026-10-28_RC7.zip",
-  "sha256": "038aa3bfdade754fe1bb7bd183c603d4a201a20d6783f8a9563b73139cfde7be",
-  "size_bytes": 80004971,
-  "migration_target": "RC7",
-  "migration_tables_sha256": "483e0a9b822527e6ed21bf69eff189c2e1346a48cc3c53bcc5feab61d5587011"
+  "current_release": "v1.0",
+  "first_public_release": true,
+  "filename": "Scarlett_English_Patch_v1.0.zip",
+  "sha256": "9098d93654f0c34f809677ec19fe0bb0508a51b4af59903c81e36493f57e9c97",
+  "size_bytes": 187302960,
+  "release_url": "https://github.com/Dern00/scarlett-english-patch/releases/tag/v1.0",
+  "download_url": "https://github.com/Dern00/scarlett-english-patch/releases/download/v1.0/Scarlett_English_Patch_v1.0.zip",
+  "migration_target": "v1.0",
+  "migration_tables_sha256": "f7a069034c34d81722316b46ef311103041cb831f016fa1abcaf211a2bc2dd33"
 }

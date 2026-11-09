@@ -1,36 +1,78 @@
+<p align="center">
+  <img src="assets/banner.svg" alt="Scarlett English Patch" width="100%">
+</p>
+
 # Scarlett English Patch
 
-English translation patch for the original Windows PC release of **Scarlett**, with both original game updates installed.
+An English translation patch for the original Windows PC release of **Scarlett** by **nekoneko-software**.
 
-This repository is private while testing continues. The current playable package is **RC7**. The save converter is a separate, newly tested utility; the RC7 ZIP itself has not been changed.
+**v1.0 · First public release**
+
+[**Download v1.0**](https://github.com/Dern00/scarlett-english-patch/releases/tag/v1.0) · [Installation](#installation) · [Report an issue](https://github.com/Dern00/scarlett-english-patch/issues/new/choose)
+
+## Features
+
+- English scenario text, Cyclopedia entries, chapter summaries and bonus content.
+- Translated menus and interface artwork, with the original visual design preserved.
+- ScarlettFont for dialogue, speaker names and backlog, with wrapping and layout adjustments for the game's different text boxes.
+- A cleaner chapter menu with aligned, readable labels.
+- A persistent **Keep voice** option, alongside voice-playback and backlog-ambience repairs.
+- A folder-picker installer with verified backups, integrated save handling and a matching restore tool.
+
+## Requirements
+
+- Your own copy of the original **Japanese Windows PC game**, with **both official updates** installed.
+- Windows with Japanese system locale, or a compatible Japanese locale environment.
+
+The patch does not install the game or change Windows locale. Python and an internet connection are not required for installation.
 
 ## Installation
 
-Use the packaged release ZIP, extract it outside the game folder, and run `Install.cmd`. Follow its folder prompt. Close the game first. Use `Restore.cmd` from the same package to restore the backed-up files before installing a different release.
+1. Close Scarlett. Keep a backup of your game and saves; a separate game copy is recommended.
+2. Download **Scarlett_English_Patch_v1.0.zip** from [Releases](https://github.com/Dern00/scarlett-english-patch/releases/tag/v1.0).
+3. Extract the **entire ZIP** into a folder outside the game folder.
+4. Run **Install.cmd**, then choose the Scarlett game folder.
+5. Launch **Scarlett.exe** from the patched game folder and start a new game.
 
-The installer preserves `savedata`. Preserving the files alone does not make every old scene save compatible with changed scripts. Read [SAVE-MIGRATION.md](SAVE-MIGRATION.md) before carrying saves across versions.
+Use the release ZIP rather than GitHub's **Code → Download ZIP** source archive. The source archive does not contain the playable patch payload.
 
-## Current features
+The installer checks the supported game files before replacing them and keeps exact backups under `Scarlett-English-Patch` in the selected folder. Keep that folder for restoration.
 
-- English script, dictionary, menus, and translated artwork.
-- Private ScarlettFont loading for dialogue, names, and backlog.
-- Wrapping and layout repairs across the game's different text boxes.
-- Voice playback and backlog ambience repairs.
-- A persistent **Keep voice** On/Off setting. New voices replace earlier voices; intentional scripted stops and skipping still stop playback.
-- A copy-only save converter with verified RC5/RC6-to-RC7 mappings and Japanese-to-English glossary progress mapping.
+## Saves and restoration
+
+Japanese scene saves are unsupported. Japanese shared progress, including Cyclopedia registrations, can be converted when the profile contains no unsupported scene saves. The installer validates the whole profile before applying a conversion and retains the original `savedata` folder in its backup.
+
+To restore, close the game and run **Restore.cmd**, choosing the same game folder. It restores the pre-install files and save profile while retaining any newer saves separately as `savedata-after-patch` in the selected installation backup.
+
+[Save handling and recovery](SAVE-MIGRATION.md) explains the version prompt, backup locations and interrupted-install recovery.
+
+## Keep voice
+
+In **Settings**, use **Keep voice → Change** to switch between **On** and **Off**.
+
+- **On** (default): ordinary clicks let the current voice finish. A new voiced line replaces it; scripted stops and skipping still stop playback.
+- **Off**: advancing dialogue stops the current voice.
+
+The setting is remembered across restarts. **Restore Defaults** returns it to On.
+
+## Download verification
+
+The release includes a `.sha256` file for the ZIP. [RELEASES.json](RELEASES.json) also records its size and SHA-256 hash. The extracted package includes checksums for its individual files.
+
+## Feedback
+
+[Open an issue](https://github.com/Dern00/scarlett-english-patch/issues/new/choose) with the patch version, steps to reproduce the problem, and a screenshot where useful. For save-related problems, say whether the profile began in the Japanese game. Please check files for personal information before attaching them.
 
 ## Repository contents
 
-- `scarlett_save_migration.py` and `save-migration-maps.json.gz`: standalone converter and compatibility tables. Requires Python 3.10 or newer; no third-party Python packages.
-- `Install.cmd`, `Install.ps1`, `Restore.cmd`, `Restore.ps1`, `Installer.Core.ps1`: installer sources, intended for the complete release package with its manifest and payload.
-- `SAVE-MIGRATION.md`: supported conversions, commands, and rollback instructions.
-- `VALIDATION.md`: exact testing scope and remaining limitations.
-- `RELEASES.json`: release file hashes.
+This repository contains the installer sources, release documentation, checksums and font notices. The complete playable patch is attached to the [v1.0 release](https://github.com/Dern00/scarlett-english-patch/releases/tag/v1.0); generated migration tables and game payloads are distributed there.
 
-This is a curated distribution/tooling repository, not a complete reproduction of the private translation workspace. The original game, extracted scripts, workbook, user saves, personal paths, and private review records are excluded. The complete patch is distributed separately from the repository's source tree.
+[Validation](VALIDATION.md) describes the automated checks and bounded in-game tests. Extracted game scripts, translation workbooks, personal saves and private project records are not part of the source tree.
 
-## Reporting problems
+## Credits
 
-Include the patch version, whether the affected save predates that version, and a screenshot or short description. Do not post personal save folders or logs publicly without checking their contents.
+Original game, artwork, text, audio and branding belong to **nekoneko-software** and their respective creators. This is an unofficial fan translation project.
 
-Game artwork, audio, text, and branding remain the property of their respective rights holders. Font notices accompany the packaged font. No new license is assigned to third-party materials by this repository.
+**ScarlettFont** derives from EdensRitterEN, Bree and Sawarabi Mincho. It loads privately in the game, without a Windows font installation. The release includes the font and required notices; copies of those notices are in [licenses](licenses/).
+
+This repository does not assign a new license to the original game or other third-party materials.

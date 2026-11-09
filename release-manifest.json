@@ -1,0 +1,229 @@
+{
+  "schema_version": 1,
+  "release_id": "scarlett-en-v1.0",
+  "targets": [
+    {
+      "path": "Scarlett.exe",
+      "size": 618496,
+      "sha256": "a942fc8dff060b650f208f2e4f5d4538b9f9e05f0c97b059c48dcc3453cbd78e",
+      "payload": "payload/Scarlett.exe",
+      "bases": [
+        {
+          "variant": "pristine",
+          "size": 548864,
+          "sha256": "efb37875f1abe22a870270b9d1fa653a7e69f6e823369e72d7e98abed5937399"
+        },
+        {
+          "variant": "menu-fixed",
+          "size": 548864,
+          "sha256": "dc946bbc8e2d302bd10a391cf583d5fd353a8ea44a64dd36935816abc9c76d21"
+        },
+        {
+          "variant": "english",
+          "size": 618496,
+          "sha256": "a942fc8dff060b650f208f2e4f5d4538b9f9e05f0c97b059c48dcc3453cbd78e"
+        }
+      ]
+    },
+    {
+      "path": "update2.arc",
+      "size": 583735382,
+      "sha256": "e79db0c01d31cd4f6309b66a8a258ce381e67a642edb00c706ccc89d34293650",
+      "payload": "payload/update2.arc",
+      "bases": [
+        {
+          "variant": "original-update2",
+          "size": 20396268,
+          "sha256": "f9e9e70927deeb10f36842ee71db558628cc904b62b54bff1f3bd3c7fe8e1bc5"
+        },
+        {
+          "variant": "rc5",
+          "size": 349306445,
+          "sha256": "40d0b98aae0349bb70cfbbf024cc835362b5363987d69e1c95d0d7f044bdb946"
+        },
+        {
+          "variant": "rc6",
+          "size": 381680378,
+          "sha256": "e3705d75d43ba6747144ec05be074bbc5b97acc193e101f4e075b9b4b7962c3f"
+        },
+        {
+          "variant": "rc7",
+          "size": 381680435,
+          "sha256": "4f236d9fc1841cd7cb48ef302d4a557376f6c6a79bd45019422b3b8f2bbfac0d"
+        },
+        {
+          "variant": "rc8",
+          "size": 381678674,
+          "sha256": "43dfd46276dcd349763ff27779fdcbec09ae0020ad4709443c3aeeb996861609"
+        },
+        {
+          "variant": "test-2026-11-07",
+          "size": 583735382,
+          "sha256": "07cb6700aa69690e1723a3f9e8b67e8b8fc4c49e534bd46ef06f72a2aca1d15b"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "data.arc",
+      "size": 1009456844,
+      "sha256": "0928d743339a72b40288446d997d581a539adda79d457a929ec99456e3d4dc94"
+    },
+    {
+      "path": "data1.arc",
+      "size": 936886829,
+      "sha256": "3015366a1876b85843af88249692e73e7100e2e02cd68c616aea22291aab1aa1"
+    },
+    {
+      "path": "data2.arc",
+      "size": 322683813,
+      "sha256": "fd4723436118dfd71351e3afb3130942586db2fd7c3efd00f107088832727979"
+    },
+    {
+      "path": "fastdata.arc",
+      "size": 57895145,
+      "sha256": "f7b7579c4108b39903a96d48da5a480cd2208216d31241f9354bf58f6c7b1dad"
+    },
+    {
+      "path": "fastdata1.arc",
+      "size": 81425952,
+      "sha256": "ab0b8f554bad9296f97d744e58ff4d5dfeaa8b5285de5d57db21a50f065278d5"
+    },
+    {
+      "path": "scenario.arc",
+      "size": 4233902,
+      "sha256": "c56da8826076f44e618c806458df4fa7aeec325c8ad65070c95611c516b82827"
+    },
+    {
+      "path": "slowdata1.arc",
+      "size": 69443967,
+      "sha256": "67a73e9c01ff98dac90426a9697648e3122ff564985766111fe6cee24ecead44"
+    },
+    {
+      "path": "slowdata2.arc",
+      "size": 153795163,
+      "sha256": "798401fa7a41117c2263661fd5a10137c3c3cbc9068be91b5d8e76ddde6b7b80"
+    },
+    {
+      "path": "slowdata5.arc",
+      "size": 85529715,
+      "sha256": "2196549571f7feb177368e1970edd0460bae681565639b0cb76f6fee9bd2a8c8"
+    },
+    {
+      "path": "stream.arc",
+      "size": 245647560,
+      "sha256": "3c186c732fe8f09940aa260a234d969260406a647bf9b8fd9f2f8ec95ee78192"
+    },
+    {
+      "path": "update.arc",
+      "size": 30840879,
+      "sha256": "8f88ffebd0dd5cc524594ffe7b6e7e2e9f61fc04ddd2255abdd1d630c3da2d4d"
+    },
+    {
+      "path": "voice1.arc",
+      "size": 165372322,
+      "sha256": "0944b1049d32331025c1f5bfdf4c42c7d27e8d83fe074b3dbec114aa1dc41af6"
+    },
+    {
+      "path": "voice2.arc",
+      "size": 66451710,
+      "sha256": "584841b1881d542102e311b260935e8e2ca8b5586e94d8b6cc87a1c337c03031"
+    },
+    {
+      "path": "voice3.arc",
+      "size": 38042576,
+      "sha256": "a97cb487761fed82c7a88291afa52498e0c318b6e4c3aa3b1f7436270089b7fe"
+    },
+    {
+      "path": "voice4.arc",
+      "size": 181338634,
+      "sha256": "c6d45aeb4209ffa10b8996c715c05bb873b2b76dd7aba2b0d0b2111d267b4ee0"
+    }
+  ],
+  "support_files": [
+    {
+      "path": "README.txt",
+      "size": 3241,
+      "sha256": "b19e1b11d0348f5a4b473f13dc2710ac7ea512b5959c763d1bcdbf9d164ba59b"
+    },
+    {
+      "path": "SaveMigration.Core.ps1",
+      "size": 20024,
+      "sha256": "0fe0538aab3495fe4d259ab6ca17dbe385a03fc21ebdaed5b6709f7ab5690ae3"
+    },
+    {
+      "path": "save-migration-maps.json.gz",
+      "size": 6866426,
+      "sha256": "f7a069034c34d81722316b46ef311103041cb831f016fa1abcaf211a2bc2dd33"
+    },
+    {
+      "path": "fonts/ScarlettFont.ttf",
+      "size": 45416,
+      "sha256": "eff97039c7de32b7ff07efc1cd1aec98e0042fc34c6b0cdd6d4ad83886515395"
+    },
+    {
+      "path": "fonts/FONT-NOTICE.txt",
+      "size": 528,
+      "sha256": "c843e5ff7d67be0f82d917813d7a284448471d6d1b73e86d8b2ed9c70a392059"
+    },
+    {
+      "path": "fonts/OFL-Bree.txt",
+      "size": 4505,
+      "sha256": "d9ed6b3c87944e5bb791edafea9a624e700e1244725da0f6332996a1f8d42237"
+    },
+    {
+      "path": "fonts/OFL-SawarabiMincho.txt",
+      "size": 4393,
+      "sha256": "7f18ec1ebb6b50e3ed0f74b2c61f25b8d7cd69e43f4de66e991bcfd3c419a8bb"
+    }
+  ],
+  "installer_files": [
+    {
+      "path": "Install.ps1",
+      "size": 618,
+      "sha256": "e2d6ded86944c41e7fdc602cae5a2072e19cac283daefe41de6c21220720ab9b"
+    },
+    {
+      "path": "Restore.ps1",
+      "size": 681,
+      "sha256": "cb1c522f1490cd8f59bb21c9c32122923d44922c9fb6a9290e9f1dbd2a960322"
+    },
+    {
+      "path": "Installer.Core.ps1",
+      "size": 29809,
+      "sha256": "de45078fbfae04a43a5d5a597196d9cd2746a107dc4c670058b9e17bcfece4ee"
+    },
+    {
+      "path": "Install.cmd",
+      "size": 180,
+      "sha256": "309f4e8d0cb685a6e58b798d5f8fcd56bd47fe9667c5c28f359b648af8adca98"
+    },
+    {
+      "path": "Restore.cmd",
+      "size": 180,
+      "sha256": "6e9862d34d0192192a49596ee4446cb2edfdee1ecbaabc03fb359f63b55aaffb"
+    }
+  ],
+  "save_migration": {
+    "target": "v1.0",
+    "supported_sources": [
+      "rc5",
+      "rc6",
+      "rc7",
+      "rc8",
+      "test-2026-11-07",
+      "japanese_shared_progress_only"
+    ],
+    "unmapped_positions": "refuse",
+    "original_profile_backup": true,
+    "restore_preserves_newer_profile": true
+  },
+  "compatibility": {
+    "supported_profile": "new_game_or_verified_save_conversion",
+    "native_save_validation": "ordinary_opening_saves_only",
+    "Japanese_scene_saves": "unsupported",
+    "Introduction_short_reactions_pending": 2,
+    "speech_evidence": "ASR_provisional_no_direct_model_listening"
+  }
+}

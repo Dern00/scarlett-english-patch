@@ -9,8 +9,11 @@ extracted/
 *.arc
 *.exe
 *.zip
+*.gz
 *.bak
 *.log
-scarlett-migration.json
 .env
 .env.*
+payload/
+scarlett-migration.json
+scarlett-save-version.json

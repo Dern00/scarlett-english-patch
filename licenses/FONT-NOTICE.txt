@@ -1,0 +1,4 @@
+ScarlettFont is derived from EdensRitterEN, itself modified from Bree by TypeTogether and Sawarabi Mincho by mshio.
+The original font credits and SIL Open Font License 1.1 are retained in the accompanying license files.
+ScarlettFont restores the Latin letter ô as an o/circumflex composite and maps the original note outline to U+266A (♪). All other existing outlines, metrics and character mappings are unchanged.
+Original EdensRitterEN file remains unchanged. The patch loads ScarlettFont privately inside its process.

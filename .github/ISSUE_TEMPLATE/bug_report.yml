@@ -1,0 +1,38 @@
+name: Bug report
+description: Report a problem with the Scarlett English Patch.
+title: "[Bug]: "
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Patch version
+      placeholder: v1.0
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Describe the problem and what you expected. Screenshots are welcome.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Include the chapter or menu involved where possible.
+    validations:
+      required: true
+  - type: dropdown
+    id: saves
+    attributes:
+      label: Save profile
+      options:
+        - New English game/profile
+        - Shared progress carried over from the Japanese game
+        - Other or unsure
+  - type: textarea
+    id: environment
+    attributes:
+      label: Windows and locale setup
+      description: Include Windows version and Japanese locale setup if relevant. Avoid personal paths and private account information.

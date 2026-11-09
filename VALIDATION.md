@@ -1,15 +1,27 @@
-# Migration validation
+# v1.0 validation
 
-Tests were performed in an isolated game copy with frozen release archives. No original installation, workbook, or real user savedata was changed.
+Testing used isolated game copies and disposable installer fixtures. The original installation and translation workbook were preserved.
 
-- Created an ordinary opening save using the released RC5 scripts. Converted two console frame positions, loaded it under RC7, advanced to the next passage, opened the backlog, and returned normally.
-- Created an ordinary opening save using released RC6 scripts and loaded it under RC7. Its active positions did not need changing.
-- Built a clearly identified Japanese-layout glossary fixture containing Beretta M92F, Orange marking, and Kadena Air Base across three profiles. Converted it and verified the correct English headings and the complete Kadena card in RC7.
-- Tested every one of the 104 glossary keys across the 3 × 14 × 108 matrix while preserving all bytes outside the matrix.
-- Confirmed a malformed file and an unknown script position stop conversion, and no output folder is created when validation fails.
-- Confirmed source folders and read-history bytes remain unchanged, existing destinations are refused, and converting a migrated scene as RC7 produces identical bytes.
-- Restored the isolated game's prior savedata and closed the game after testing.
+## Automated checks
 
-These are bounded compatibility checks, not an exhaustive playthrough or a promise that every old save will load. Unknown releases and ambiguous states remain excluded. The converter does not repair unrelated pre-existing corruption.
+- Workbook source/ID integrity and integrated-ledger verification across 83,250 rows.
+- A targeted glossary consistency audit, with contextual variants checked before deciding whether a correction was needed.
+- Chapter-menu instruction/control-flow preservation, click-rectangle geometry and normal/selected/pressed bitmap states.
+- Twenty installer/save transaction checks, including injected failures, interrupted installation and Restore, repeated runs, invalid-data refusal and preservation of newer progress.
+- Byte-for-byte agreement between the Windows save converter and a separate reference implementation, covering all 104 glossary keys across the 3 × 14 × 108 registration array.
+- Actual extracted-package installation, repeated installation, direct update and layered rollback on full-size disposable copies.
+- Package membership, file checksums, standardized ZIP metadata and scans for local identifying data, including decrypted scripts inside the patch archive.
 
-All review and tests in this migration pass were performed by the current agent; no independent reviewer is claimed.
+## In-game checks
+
+- Fully unlocked and partially unlocked chapter menus, chapter/Intermission navigation and the NEW marker.
+- Two ordinary opening scene saves converted to v1.0, dialogue advancement and backlog return.
+- Creating and reloading a new save after conversion.
+- Japanese shared-progress conversion showing Beretta M92F, Orange marking and Kadena Air Base.
+- Kadena's complete nine-line entry and switching to Beretta without leftover text.
+
+Earlier bounded rendering checks covered the game's dialogue styles, name panels, large/small emphasis, backlog and representative long passages.
+
+## Coverage boundaries
+
+These are bounded tests, not an exhaustive playthrough or a guarantee for every existing save. Unknown execution positions are refused. The PowerShell-hosted save-version selector could not be visually inspected by desktop automation; its conversion/transaction functions were checked with explicit source selections. Hover-only chapter-menu states were not exercised natively. Broader speech verification remains deferred.
